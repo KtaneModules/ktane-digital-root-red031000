@@ -87,7 +87,7 @@ public class DigitalRootScript : MonoBehaviour {
 		Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, YesButton.transform);
 		YesButton.AddInteractionPunch();
 		if (!_lightsOn || _isSolved) return;
-		Debug.LogFormat("[Digital Root #{0}] Yes button pressed", _moduleId);
+		Debug.LogFormat("[Digital Root #{0}] Button with the label \"YES\" pressed", _moduleId);
 		if (DigitalRoot)
 		{
 			Debug.LogFormat("[Digital Root #{0}] Module Passed!", _moduleId);
@@ -106,7 +106,7 @@ public class DigitalRootScript : MonoBehaviour {
 		Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, NoButton.transform);
 		NoButton.AddInteractionPunch();
 		if (!_lightsOn || _isSolved) return;
-		Debug.LogFormat("[Digital Root #{0}] No button pressed", _moduleId);
+		Debug.LogFormat("[Digital Root #{0}] Button with the label \"NO\" pressed", _moduleId);
 		if (!DigitalRoot)
 		{
 			Debug.LogFormat("[Digital Root #{0}] Module Passed!", _moduleId);
