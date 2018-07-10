@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class DigitalRootScript : MonoBehaviour {
 	#region Global Variables
@@ -135,6 +136,16 @@ public class DigitalRootScript : MonoBehaviour {
 			return new KMSelectable[] { YesButton };
 		else
 			return null;
+	}
+	private IEnumerator TwitchHandleForcedSolve()
+	{
+		if (!_isSolved)
+		{
+			yield return null;
+			Debug.LogFormat("[Digital Root #{0}] Module forcibly solved", _moduleId);
+			if (DigitalRoot) YesHandler();
+			else NoHandler();
+		}
 	}
 	#endregion
 }
