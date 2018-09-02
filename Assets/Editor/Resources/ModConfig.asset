@@ -26,9 +26,9 @@ MonoBehaviour:
     Recreation and Twitch Plays support by red031000
 
 
-    Manual location: https://www.dropbox.com/s/gv9im4aub7s2090/Digital%20Root.pdf?dl=0
+    Manual location: https://ktane.timwi.de/HTML/Digital%20Root.html
 
     Module ID: digitalRoot'
-  version: 1.3
+  version: 1.4
   outputFolder: build
   previewImage: {fileID: 2800000, guid: f364f96f3f468e84eaba78e74df25fcb, type: 3}

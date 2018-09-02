@@ -12,7 +12,7 @@ public class DigitalRootScript : MonoBehaviour {
 	private static int _moduleIdCounter = 1;
 	private int _moduleId = 0;
 
-	private int Screen1Num, Screen2Num, Screen3Num, AnswerNum;
+	private int Screen1Num, Screen2Num, Screen3Num;
 	private bool DigitalRoot;
 
 	private bool _isSolved = false, _lightsOn = false;
@@ -36,16 +36,9 @@ public class DigitalRootScript : MonoBehaviour {
 		Screen1Num = Random.Range(0, 10);
 		Screen2Num = Random.Range(0, 10);
 		Screen3Num = Random.Range(0, 10);
+		int AnswerNum;
 		DigitalRoot = random == 1;
-		int value = Screen1Num * 100 + Screen2Num * 10 + Screen3Num;
-		do
-		{
-			int result = 0;
-			for (; value > 9; value /= 10)
-				result += value % 10;
-
-			value = result + value;
-		} while (value > 9);
+		int value = (((Screen1Num * 100 + Screen2Num * 10 + Screen3Num) - 1) % 9) + 1;
 		if (DigitalRoot)
 		{
 			AnswerNum = value;
@@ -125,8 +118,8 @@ public class DigitalRootScript : MonoBehaviour {
 
 	#region Twitch Plays
 #pragma warning disable 414
-	private string TwitchHelpMessage = "Press Yes with '!{0} press Yes'. Press No with '!{0} press No'.";
-	private string TwitchManualCode = "Digital Root";
+	private readonly string TwitchHelpMessage = "Press Yes with '!{0} press Yes'. Press No with '!{0} press No'.";
+	private readonly string TwitchManualCode = "Digital Root";
 #pragma warning restore 414
 	public KMSelectable[] ProcessTwitchCommand(string command)
 	{
