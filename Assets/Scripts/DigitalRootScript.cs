@@ -5,6 +5,7 @@ public class DigitalRootScript : MonoBehaviour {
 	#region Global Variables
 	public KMAudio Audio;
 	public KMBombModule Module;
+	public KMRuleSeedable RuleSeedable;
 
 	public KMSelectable YesButton, NoButton;
 	public TextMesh Screen1, Screen2, Screen3, AnswerScreen;
@@ -15,16 +16,54 @@ public class DigitalRootScript : MonoBehaviour {
 	private int Screen1Num, Screen2Num, Screen3Num;
 	private bool DigitalRoot;
 
+	private KMSelectable YesAns, NoAns;
+	private MonoRandom rnd;
+
 	private bool _isSolved = false, _lightsOn = false;
 	#endregion
 
 	#region Answer Calculation
-	void Start () {
+	private void Start ()
+	{
+		rnd = RuleSeedable.GetRNG();
+		int seed = rnd.Seed;
+		if (seed == 1)
+		{
+			YesAns = YesButton;
+			NoAns = NoButton;
+			UsesVanillaRuleModifierAPI = false;
+		}
+		else
+		{
+			int yes = rnd.Next(0, 2);
+			int no = rnd.Next(0, 2);
+			switch (yes)
+			{
+				case 0:
+					YesAns = NoButton;
+					break;
+				default:
+					YesAns = YesButton;
+					break;
+			}
+
+			switch (no)
+			{
+				case 0:
+					NoAns = YesButton;
+					break;
+				default:
+					NoAns = NoButton;
+					break;
+			}
+
+			UsesVanillaRuleModifierAPI = true;
+		}
 		_moduleId = _moduleIdCounter++;
 		Module.OnActivate += Activate;
 	}
 
-	void Activate()
+	private void Activate()
 	{
 		Init();
 		_lightsOn = true;
@@ -58,6 +97,7 @@ public class DigitalRootScript : MonoBehaviour {
 		Debug.LogFormat("[Digital Root #{0}] The numbers are {1}, {2} and {3}", _moduleId, Screen1Num, Screen2Num, Screen3Num);
 		Debug.LogFormat("[Digital Root #{0}] The answer is {1}", _moduleId, AnswerNum);
 		Debug.LogFormat("[Digital Root #{0}] Digital root: {1}", _moduleId, DigitalRoot);
+		Debug.LogFormat("[Digital Root #{0}] Press the button labeled \"{1}\"", _moduleId, DigitalRoot && YesAns == YesButton || !DigitalRoot && NoAns == YesButton ? "YES" : "NO");
 	}
 	#endregion
 
@@ -82,7 +122,7 @@ public class DigitalRootScript : MonoBehaviour {
 		YesButton.AddInteractionPunch();
 		if (!_lightsOn || _isSolved) return;
 		Debug.LogFormat("[Digital Root #{0}] Button with the label \"YES\" pressed", _moduleId);
-		if (DigitalRoot)
+		if (DigitalRoot && YesAns == YesButton || !DigitalRoot && NoAns == YesButton)
 		{
 			Debug.LogFormat("[Digital Root #{0}] Module Passed!", _moduleId);
 			Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CorrectChime, YesButton.transform);
@@ -101,7 +141,7 @@ public class DigitalRootScript : MonoBehaviour {
 		NoButton.AddInteractionPunch();
 		if (!_lightsOn || _isSolved) return;
 		Debug.LogFormat("[Digital Root #{0}] Button with the label \"NO\" pressed", _moduleId);
-		if (!DigitalRoot)
+		if (DigitalRoot && YesAns == NoButton || !DigitalRoot && NoAns == NoButton)
 		{
 			Debug.LogFormat("[Digital Root #{0}] Module Passed!", _moduleId);
 			Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CorrectChime, NoButton.transform);
@@ -120,6 +160,7 @@ public class DigitalRootScript : MonoBehaviour {
 #pragma warning disable 414
 	private readonly string TwitchHelpMessage = "Press Yes with '!{0} press Yes'. Press No with '!{0} press No'.";
 	private readonly string TwitchManualCode = "Digital Root";
+	private bool UsesVanillaRuleModifierAPI;
 #pragma warning restore 414
 	public KMSelectable[] ProcessTwitchCommand(string command)
 	{
@@ -136,7 +177,7 @@ public class DigitalRootScript : MonoBehaviour {
 		{
 			yield return null;
 			Debug.LogFormat("[Digital Root #{0}] Module forcibly solved", _moduleId);
-			if (DigitalRoot) YesHandler();
+			if (DigitalRoot && YesAns == YesButton || !DigitalRoot && NoAns == YesButton) YesHandler();
 			else NoHandler();
 		}
 	}

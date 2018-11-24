@@ -29,6 +29,6 @@ MonoBehaviour:
     Manual location: https://ktane.timwi.de/HTML/Digital%20Root.html
 
     Module ID: digitalRoot'
-  version: 1.4
+  version: 1.5
   outputFolder: build
   previewImage: {fileID: 2800000, guid: f364f96f3f468e84eaba78e74df25fcb, type: 3}
